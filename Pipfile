@@ -8,6 +8,7 @@ flask = "*"
 pymysql = "*"
 pyjwt = "*"
 flask-bcrypt = "*"
+gunicorn = "*"
 
 [dev-packages]
 
