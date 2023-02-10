@@ -10,6 +10,7 @@ pyjwt = "*"
 flask-bcrypt = "*"
 gunicorn = "*"
 bleach = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

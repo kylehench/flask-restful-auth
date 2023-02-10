@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 import os
 # a cursor is the object we use to interact with the database
 import pymysql.cursors
