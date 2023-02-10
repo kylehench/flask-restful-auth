@@ -43,6 +43,8 @@ def login():
     response = make_response(response_data)
   return response
 
-@app.route('/logout')
+@app.route('/api/logout')
 def logout():
-  return ''
+  response = make_response({'status': 'success', 'data': {'logoutRequest': 'Successfully logged out.'}})
+  response.set_cookie('usertoken', value='', secure=True, httponly=True, expires=0)
+  return response
