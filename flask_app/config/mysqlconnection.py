@@ -1,6 +1,7 @@
+import os
 from dotenv import load_dotenv
 load_dotenv()
-import os
+
 # a cursor is the object we use to interact with the database
 import pymysql.cursors
 # this class will give us an instance of a connection to our database
