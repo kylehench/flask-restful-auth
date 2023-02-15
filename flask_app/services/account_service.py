@@ -73,6 +73,6 @@ def login(sanitized_email, password):
     response_data['data']['username'] = user.username
     response_data['data']['email'] = user.email
   else:
-    add_error(response_data, 'credentials', ValueError('Incorrect username or password.'))
+    add_error(response_data, 'credentials', ValueError('Incorrect email or password.'))
 
   return response_data, user_id
