@@ -49,6 +49,7 @@ def create_account(sanitized_username, sanitized_email, password, password_confi
       sanitized_username = sanitized_username,
       hashed_password = hashed_password
     )
+    response_data['data']['user_id'] = user_id
     response_data['data']['username'] = sanitized_username
     response_data['data']['email'] = sanitized_email
   except SystemError:
@@ -70,6 +71,7 @@ def login(sanitized_email, password):
   
   # if user found and password is correct, add email and username to response
   if user and bcrypt.check_password_hash(user.password, password):
+    response_data['data']['user_id'] = user_id
     response_data['data']['username'] = user.username
     response_data['data']['email'] = user.email
   else:
