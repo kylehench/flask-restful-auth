@@ -13,7 +13,13 @@ def make_usertoken_response(response_data, user_id):
     algorithm="HS256"
   )
   response = make_response(response_data)
-  response.set_cookie('usertoken', value=usertoken, secure=True, httponly=True)
+  response.set_cookie(
+    key='usertoken',
+    value=usertoken,
+    secure=True,
+    httponly=True,
+    expires=datetime.datetime.utcnow() + datetime.timedelta(days=28)
+  )
   return response
 
 # routes
