@@ -1,26 +1,6 @@
+from flask import request, make_response, abort, Response
 from flask_app import app
-from flask_app.services import account_service
-from flask_app.services import sanitization_service
-from flask import request, make_response
-import jwt, datetime
-
-def make_usertoken_response(response_data, user_id):
-  usertoken = jwt.encode(
-    { 'user_id': user_id,
-      'exp' : datetime.datetime.utcnow() + datetime.timedelta(days=28)
-    },
-    app.SECRET_KEY,
-    algorithm="HS256"
-  )
-  response = make_response(response_data)
-  response.set_cookie(
-    key='usertoken',
-    value=usertoken,
-    secure=True,
-    httponly=True,
-    expires=datetime.datetime.utcnow() + datetime.timedelta(days=28)
-  )
-  return response
+from flask_app.services import account_service, token_service, sanitization_service
 
 # routes
 @app.route('/api/register', methods=['POST'])
@@ -32,7 +12,7 @@ def register():
     password_confirm = request.json.get('password_confirm'),
   )
   if response_data['status'] == 'success':
-    response = make_usertoken_response(response_data, user_id)
+    response = token_service.make_usertoken_response(response_data, user_id)
   else:
     response = make_response(response_data)
   return response
@@ -44,10 +24,21 @@ def login():
     password = request.json.get('password'),
   )
   if response_data['status'] == 'success':
-    response = make_usertoken_response(response_data, user_id)
+    response = token_service.make_usertoken_response(response_data, user_id)
   else:
     response = make_response(response_data)
   return response
+
+@app.route('/api/renew-token', methods=['POST'])
+def renew_token():
+  try:
+    decrypted_token = token_service.decrypt_token(request)
+    user_id = decrypted_token['user_id']
+    response_data = {'status': 'success', 'data': {}}
+    response = token_service.make_usertoken_response(response_data, user_id)
+    return response
+  except:
+    abort(Response("Please sign in.", 401))
 
 @app.route('/api/logout')
 def logout():
