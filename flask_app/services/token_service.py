@@ -34,6 +34,7 @@ def make_usertoken_response(response_data, user_id):
     value=usertoken,
     secure=True,
     httponly=True,
-    expires=expires_iso
+    # note: expires must be datetime object
+    expires=expires
   )
   return response
