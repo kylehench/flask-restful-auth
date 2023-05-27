@@ -59,22 +59,21 @@ def create_account(sanitized_username, sanitized_email, password, password_confi
 
 def login(sanitized_email, password):
   response_data = {'status': 'success', 'data': {}}
-  user, user_id = None, None
+  user = None
 
   # attempt to get user from database
   try:
     user = user_model.User.get_by_email(sanitized_email)
-    user_id = user.id
   except ValueError as e:
     # user, user_id = None
     add_error(response_data)
   
   # if user found and password is correct, add email and username to response
   if user and bcrypt.check_password_hash(user.password, password):
-    response_data['data']['user_id'] = user_id
+    response_data['data']['user_id'] = user.id
     response_data['data']['username'] = user.username
     response_data['data']['email'] = user.email
   else:
     add_error(response_data, 'credentials', ValueError('Incorrect email or password.'))
 
-  return response_data, user_id
+  return response_data, user.id
