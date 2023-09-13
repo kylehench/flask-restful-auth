@@ -76,4 +76,4 @@ def login(sanitized_email, password):
   else:
     add_error(response_data, 'credentials', ValueError('Incorrect email or password.'))
 
-  return response_data, user.id
+  return response_data, user.id if user else None
